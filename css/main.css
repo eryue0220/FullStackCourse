@@ -1,0 +1,86 @@
+/* -- base --*/
+* {
+  margin: 0 auto;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+}
+/* -- Grid -- */
+.container {
+  width: 980px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.col-4 {
+  width: 33.33%;
+}
+
+.col-6 {
+  width: 50%;
+}
+
+.col-12 {
+  width: 100%;
+}
+
+/* -- header -- */
+.logo {
+  width: 350px;
+}
+
+.person-name,
+.person-title {
+  color: #2d3c49;
+  text-align: right;
+  text-transform: uppercase;
+}
+.person-name {
+  font-size: 60px;
+  margin: 8px 0;
+  font-weight: 300;
+}
+
+.person-title {
+  font-size: 20px;
+  font-weight: 400;
+}
+.border {
+  border-bottom: 3px solid #7d97ad;
+}
+
+/* -- content -- */
+.hero-img {
+  max-width: 100%;
+}
+
+.sub-title {
+  font-weight: 400;
+  color: #7d97ad;
+}
+
+.feature-img {
+  width: 310px;
+  height: 220px;
+  display: block;
+}
+
+.img-name {
+  margin: 10px 0 4px;
+  font-size: 26px;
+  font-weight: 400;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.img-url {
+  text-align: center;
+}
