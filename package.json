@@ -1,0 +1,23 @@
+{
+  "name": "full-stack-course",
+  "version": "1.0.0",
+  "description": "Udacity full stack course code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eryue0220/FullStackCourse.git"
+  },
+  "keywords": [
+    "full",
+    "stack"
+  ],
+  "author": "cinchen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eryue0220/FullStackCourse/issues"
+  },
+  "homepage": "https://github.com/eryue0220/FullStackCourse#readme"
+}
