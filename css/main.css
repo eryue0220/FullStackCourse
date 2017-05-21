@@ -9,10 +9,6 @@
   font-family: 'Lato', sans-serif;
 }
 /* -- Grid -- */
-.container {
-  width: 980px;
-}
-
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -59,7 +55,9 @@
 
 /* -- content -- */
 .hero-img {
+  display: block;
   max-width: 100%;
+  margin-bottom: 20px;
 }
 
 .sub-title {
@@ -83,4 +81,25 @@
 
 .img-url {
   text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+  .col-4 {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .person-name {
+    font-size: 40px;
+    margin: 20px 0 8px;
+  }
+}
+
+@media screen and (max-width: 768px){
+  .feature-img {
+    width: 220px;
+    height: 160px;
+  }
 }
