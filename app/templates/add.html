@@ -1,0 +1,12 @@
+<html>
+
+<body>
+    <h2>Add New Restaurant</h2>
+    <form method="POST" action="{{url_for('add')}}">
+        <input name="name" placeholder="add a new restaurant" />
+        <input type="submit">
+    </form>
+    <a href="{{url_for('restaurant_list')}}">Cancel</a>
+</body>
+
+</html>
