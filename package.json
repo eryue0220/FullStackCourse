@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/eryue0220/FullStackCourse/issues"
   },
-  "homepage": "https://github.com/eryue0220/FullStackCourse#readme"
+  "homepage": "https://github.com/eryue0220/FullStackCourse#readme",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "knockout": "^3.4.2"
+  }
 }
