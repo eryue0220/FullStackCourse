@@ -24,12 +24,11 @@
             <div class="filter-box">
                 <div class="filter-input-box">
                     <span>Filter</span>
-                    <input class="filter-input" type="text" data-bind="event: {input:filter}">
-                    <button class="filter-button" data-bind="click:filter">filter</button>
+                    <input class="filter-input" type="text" data-bind="event: {input: filter}">
                 </div>
             </div>
             <div class="filter-omnibox">
-                <ul class="filter-list" data-bind="foreach: mapList">
+                <ul class="filter-list" data-bind="foreach: filterPosition">
                     <li>
                         <p class="filter-list-title" data-bind="text:title,attr: {index: index}, click:$parent.setPos"></p>
                     </li>

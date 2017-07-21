@@ -57,21 +57,25 @@ var mapping = (function() {
 
     function ViewModel(mapMarkerArray) {
         var self = this;
+        self.mapList = ko.observableArray([]);
+        self.currentFilter = ko.observable();
 
-        this.mapList = ko.observableArray([]);
-
-        initialList.forEach(function(item, index) {
+        initialList.map(function(item, index) {
             item.index = index;
-            self.mapList.push(new map(item));
+            self.mapList.push(item);
         });
 
-        this.setPos = function() {
-            new google.maps.event.trigger(mapMarkerArray[this.index()], 'click');
-        };
+        self.filterPosition = ko.computed(function() {
+            if (!self.currentFilter()) return self.mapList();
 
-        this.filter = function(e) {
-            console.log(self.mapList);
-        };
+            return ko.utils.arrayFilter(self.mapList(), function(map) {
+                return map.title.toLowerCase().indexOf(self.currentFilter()) > -1;
+            });
+        });
+
+        self.filter = function(ko, e) {
+            self.currentFilter(e.target.value.toLowerCase());
+        }
     };
 
     return ViewModel;
