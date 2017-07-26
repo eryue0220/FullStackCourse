@@ -98,6 +98,10 @@ var mapping = (function() {
         self.animation = ko.computed(function() {
             return self.currentDirection() === 'left' ? 'slide-left' : 'slide-right';
         });
+
+        self.setPos = function(ko, e) {
+            google.maps.event.trigger(ko.marker, 'click');
+        };
     };
 
     return ViewModel;
@@ -114,32 +118,28 @@ function openInfoWindow(marker, infowindow) {
 }
 
 function getLocalNews(infowindow, marker, map) {
-    var internalPosition = marker.internalPosition;
-
     $.ajax({
-            url: 'https://api.nytimes.com/svc/semantic/v2/geocodes/query.json',
+            url: 'https://api.nytimes.com/svc/search/v2/articlesearch.json',
             method: 'GET',
             data: {
                 'api-key': 'cc1dfcf434454ef4b221282aa563f6ad',
-                latitude: internalPosition.lat(),
-                longitude: internalPosition.lng(),
-                limit: '3'
+                query: marker.title
             }
         })
         .done(function(res) {
             if (res && res.status === 'OK') {
-                var list = '';
-                list += res.result.map(function(item) {
-                    return '<li>' + item.name + '</li>'
-                })
-                var content = (
-                    '<div>' +
-                    '<h3>' + marker.title + '</h3>' +
-                    '<ul>' +
-                    list +
-                    '</ul>' +
-                    '</div'
-                );
+
+                var docs = res.response.docs[0] || {},
+                    content = (
+                        '<div>' +
+                        '<h3>' + marker.title + '</h3>' +
+                        '<div>' +
+                        '<a target="_blank" href="' + docs.web_url + '">' +
+                        docs.headline.main +
+                        '</a>' +
+                        '</div>' +
+                        '</div'
+                    );
 
                 infowindow.setContent('<div>' + content + '</div>');
                 infowindow.open(map, marker);

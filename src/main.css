@@ -100,6 +100,27 @@ li {
     cursor: pointer;
 }
 
+@media screen and (max-width: 450px) {
+    .panel {
+        width: 200px;
+    }
+    .filter-box {
+        width: 200px;
+    }
+    .filter-input-box {
+        width: 180px;
+    }
+    .filter-input {
+        width: 110px;
+    }
+    .panel-button {
+        left: 200px;
+    }
+    .slide-left {
+        left: -200px;
+    }
+}
+
 
 /* map */
 
