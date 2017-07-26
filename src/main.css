@@ -83,6 +83,14 @@ li {
     overflow: hidden;
 }
 
+.slide-left {
+    left: -410px;
+}
+
+.slide-right {
+    left: 0;
+}
+
 .filter-list-title {
     width: 100%;
     height: 40px;

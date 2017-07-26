@@ -55,46 +55,52 @@ var mapping = (function() {
         this.index = ko.observable(data.index);
     }
 
-    function ViewModel(mapMarkerArray) {
+    function ViewModel(map) {
         var self = this;
+
+        self.query = ko.observable();
+        self.currentDirection = ko.observable();
         self.mapList = ko.observableArray([]);
-        self.currentFilter = ko.observable();
 
         initialList.map(function(item, index) {
+            var marker = setMarkerAndInfoWindow(item, map);
             item.index = index;
+            item.marker = marker;
             self.mapList.push(item);
         });
 
         self.filterPosition = ko.computed(function() {
-            if (!self.currentFilter()) return self.mapList();
+            if (!self.query()) {
+                self.mapList().forEach(function(lcoation) {
+                    lcoation.marker.setVisible(true);
+                });
+                return self.mapList();
+            }
 
+            self.mapList().forEach(function(location) {
+                var matched = location.title.toLowerCase().indexOf(self.query().toLowerCase()) !== -1;
+                location.marker.setVisible(matched);
+            });
             return ko.utils.arrayFilter(self.mapList(), function(map) {
-                return map.title.toLowerCase().indexOf(self.currentFilter()) > -1;
+                return map.title.toLowerCase().indexOf(self.query()) > -1;
             });
         });
 
         self.filter = function(ko, e) {
-            self.currentFilter(e.target.value.toLowerCase());
-        }
+            self.query(e.target.value.toLowerCase());
+        };
+
+        self.slide = function(ko, e) {
+            self.currentDirection(e.target.className.baseVal === 'arrow-left' ? 'left' : 'right');
+        };
+
+        self.animation = ko.computed(function() {
+            return self.currentDirection() === 'left' ? 'slide-left' : 'slide-right';
+        });
     };
 
     return ViewModel;
 })();
-
-function slide() {
-    $('.icon').on('click', 'svg', function(e) {
-        var $target = $(this);
-        var $panel = $('.panel');
-        var isRight = $target.hasClass('arrow-right');
-
-        $panel.animate({
-            left: isRight ? 0 : -410
-        }, 500, function() {
-            $('.arrow-' + (isRight ? 'right' : 'left')).css('display', 'none');
-            $('.arrow-' + (!isRight ? 'right' : 'left')).css('display', 'block');
-        });
-    });
-}
 
 function openInfoWindow(marker, infowindow) {
     infowindow.setContent('');
@@ -102,17 +108,61 @@ function openInfoWindow(marker, infowindow) {
     infowindow.addListener('closeclick', function() {
         infowindow.marker = null;
     });
-    infowindow.setContent('<div>' + marker.title + '</div>');
-    infowindow.open(map, marker);
+
+    getLocalNews(infowindow, marker, map);
+}
+
+function getLocalNews(infowindow, marker, map) {
+    var internalPosition = marker.internalPosition;
+
+    $.ajax({
+            url: 'https://api.nytimes.com/svc/semantic/v2/geocodes/query.json',
+            method: 'GET',
+            data: {
+                'api-key': 'cc1dfcf434454ef4b221282aa563f6ad',
+                latitude: internalPosition.lat(),
+                longitude: internalPosition.lng(),
+                limit: '3'
+            }
+        })
+        .done(function(res) {
+            if (res && res.status === 'OK') {
+                var list = '';
+                list += res.result.map(function(item) {
+                    return '<li>' + item.name + '</li>'
+                })
+                var content = (
+                    '<div>' +
+                    '<h1>' + marker.title + '</h1>' +
+                    '<ul>' +
+                    list +
+                    '</ul>' +
+                    '</div'
+                );
+
+                infowindow.setContent('<div>' + content + '</div>');
+                infowindow.open(map, marker);
+            }
+        })
+        .fail(function(err) {
+            infowindow.setContent(
+                '<div>' +
+                '<h1>' + marker.title + '</h1>' +
+                '<p>Service Error</p>' +
+                '</div>'
+            );
+            infowindow.open(map, marker);
+        });
 }
 
 function setMarkerAndInfoWindow(item, map) {
     var self = this;
     var maps = google.maps;
-
+    var timer = null;
     var marker = new maps.Marker({
         title: item.title,
         position: item.position,
+        animation: maps.Animation.DROP,
         map: map
     });
 
@@ -122,27 +172,34 @@ function setMarkerAndInfoWindow(item, map) {
 
 
     marker.addListener('click', function() {
+        marker.setAnimation(maps.Animation.BOUNCE);
         openInfoWindow(this, infoWindow);
+
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function() {
+            marker.setAnimation(null);
+        }, 2000);
     });
 
     return marker;
 }
 
 function initMap() {
-    var uluru = {
+    var NYC = {
         lat: 40.7413549,
         lng: -73.99802439999996
     };
     var mapArray = [];
     var map = new google.maps.Map(document.getElementById('map'), {
-        center: uluru,
+        center: NYC,
         zoom: 18
     });
 
-    for (var i = 0, length = initialList.length; i < length; i++) {
-        mapArray.push(setMarkerAndInfoWindow(initialList[i], map));
-    }
+    ko.applyBindings(new mapping(map));
+}
 
-    slide();
-    ko.applyBindings(new mapping(mapArray));
+
+// handle loading google map error
+function handleMapError(err) {
+    console.log('err', err);
 }
