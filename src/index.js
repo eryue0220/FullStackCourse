@@ -81,6 +81,7 @@ var mapping = (function() {
                 var matched = location.title.toLowerCase().indexOf(self.query().toLowerCase()) !== -1;
                 location.marker.setVisible(matched);
             });
+
             return ko.utils.arrayFilter(self.mapList(), function(map) {
                 return map.title.toLowerCase().indexOf(self.query()) > -1;
             });
@@ -133,7 +134,7 @@ function getLocalNews(infowindow, marker, map) {
                 })
                 var content = (
                     '<div>' +
-                    '<h1>' + marker.title + '</h1>' +
+                    '<h3>' + marker.title + '</h3>' +
                     '<ul>' +
                     list +
                     '</ul>' +
@@ -147,7 +148,7 @@ function getLocalNews(infowindow, marker, map) {
         .fail(function(err) {
             infowindow.setContent(
                 '<div>' +
-                '<h1>' + marker.title + '</h1>' +
+                '<h3>' + marker.title + '</h3>' +
                 '<p>Service Error</p>' +
                 '</div>'
             );
@@ -169,7 +170,6 @@ function setMarkerAndInfoWindow(item, map) {
     var infoWindow = new maps.InfoWindow({
         content: 'Lat:' + item.position.lat + ', ' + 'Lng: ' + item.position.lng
     });
-
 
     marker.addListener('click', function() {
         marker.setAnimation(maps.Animation.BOUNCE);
