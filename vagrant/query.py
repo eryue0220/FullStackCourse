@@ -58,17 +58,19 @@ def calc_error_percent():
   ''')
 
 
-def write_files(filename, question, answer):
+def write_files(filename, question, answer, need=False):
   file_path = os.path.abspath(os.path.join(os.getcwd(), filename))
-  is_exists_file = os.path.exists(file_path)
-  
-  os.remove(file_path) if is_exists_file
-
   mode = os.path.exists(file_path) and 'a' or 'w'
+  breakLine = need and '\n' or ''
+
   with open(filename, mode) as f:
     f.write(question)
     for key in answer:
-      con = ' ' * 4 + str(key[0]) + ' - ' + str(key[1]) + '\n'
+      if question == QUESTION_3: 
+        val = '{:.2f}%'.format(key[1])
+      else:  
+        val = key[1]
+      con = ' ' * 4 + str(key[0]) + ' - ' + str(val) + breakLine
       f.write(con)
 
 
@@ -77,8 +79,8 @@ def main():
   popular_authors = get_most_popular_author()
   error_percent = calc_error_percent()
   
-  write_files('result.txt', QUESTION_1, top3_articles)
-  write_files('result.txt', QUESTION_2, popular_authors)
+  write_files('result.txt', QUESTION_1, top3_articles, True)
+  write_files('result.txt', QUESTION_2, popular_authors, True)
   write_files('result.txt', QUESTION_3, error_percent)
 
 
