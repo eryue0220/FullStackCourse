@@ -6,7 +6,8 @@ First of all, please make sure you have installed:
 
 * [vagrant](https://www.vagrantup.com/downloads.html)
 * [python 3.x](https://www.python.org/downloads/)
-* [git](https://git-scm.com/downloads) 
+* [git](https://git-scm.com/downloads)
+* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 Then clone this project in your computer via git.
 
@@ -55,3 +56,28 @@ So doing a lot of work, but what is the requirements we need to do, or what does
 * 1. `Query the most top 3 articles from the database.`
 * 2. `Query the most popular article author from the database.`
 * 3. `Query the percentage of error request.`
+
+## 3. About the SQL Views
+
+### `error_per_day`
+
+create the error view via the following sql code:
+
+```sql
+CREATE VIEW error_per_day AS
+SELECT time::date, count(*) as error_count
+FROM log
+WHERE status LIKE '%4%' OR status LIKE '%5%'
+GROUP BY time::date;
+```
+
+### `total_per_day`
+
+create the total request view via the following sql code:
+
+```sql
+CREATE VIEW toal_per_day AS
+SELECT time::date, count(*) as total_count
+FROM log
+GROUP BY time::date;
+```
