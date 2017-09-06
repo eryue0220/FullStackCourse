@@ -76,7 +76,7 @@ GROUP BY time::date;
 create the total request view via the following sql code:
 
 ```sql
-CREATE VIEW toal_per_day AS
+CREATE VIEW total_per_day AS
 SELECT time::date, count(*) as total_count
 FROM log
 GROUP BY time::date;
