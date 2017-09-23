@@ -1,5 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
 .vscode
+.vagrant
+node_modules
 npm-debug.log
 __pycache__
